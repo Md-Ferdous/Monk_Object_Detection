@@ -14,7 +14,9 @@ class CocoDataset(Dataset):
         self.img_dir = img_dir
         self.set_name = set_dir
         self.transform = transform
-
+        print(root_dir)
+        print(img_dir)
+        print(set_dir)
         self.coco = COCO(os.path.join(self.root_dir, 'annotations', 'instances_' + self.set_name + '.json'))
         self.image_ids = self.coco.getImgIds()
 
@@ -54,6 +56,7 @@ class CocoDataset(Dataset):
     def load_image(self, image_index):
         image_info = self.coco.loadImgs(self.image_ids[image_index])[0]
         path = os.path.join(self.root_dir, self.img_dir, self.set_name, image_info['file_name'])
+        print(path)
         img = cv2.imread(path)
         img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
 
