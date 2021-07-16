@@ -32,6 +32,7 @@ def get_args():
                         help="Early stopping's parameter: number of epochs with no improvement after which training will be stopped. Set to 0 to disable this technique.")
     
     parser.add_argument("--saved_path", type=str, default="trained_models")
+    parser.add_argument("--log_path", type=str, default="tensorboard/signatrix_efficientdet_coco")
 
     args = parser.parse_args()
     return args
