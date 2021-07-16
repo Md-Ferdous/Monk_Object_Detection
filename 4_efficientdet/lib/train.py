@@ -18,6 +18,8 @@ def get_args():
     parser.add_argument("--image_size", type=int, default=512, help="The common width and height for all images")
     parser.add_argument("--batch_size", type=int, default=8, help="The number of images per batch")
     parser.add_argument("--lr", type=float, default=1e-4)
+    parser.add_argument('--csv_train', help='Path to file containing training annotations (see readme)')
+    parser.add_argument('--csv_classes', help='Path to file containing class list (see readme)')
     parser.add_argument('--alpha', type=float, default=0.25)
     parser.add_argument('--gamma', type=float, default=1.5)
     parser.add_argument("--num_epochs", type=int, default=500)
@@ -26,8 +28,7 @@ def get_args():
                         help="Early stopping's parameter: minimum change loss to qualify as an improvement")
     parser.add_argument("--es_patience", type=int, default=0,
                         help="Early stopping's parameter: number of epochs with no improvement after which training will be stopped. Set to 0 to disable this technique.")
-    parser.add_argument("--data_path", type=str, default="data/COCO", help="the root folder of dataset")
-    parser.add_argument("--log_path", type=str, default="tensorboard/signatrix_efficientdet_coco")
+    
     parser.add_argument("--saved_path", type=str, default="trained_models")
 
     args = parser.parse_args()
@@ -54,14 +55,11 @@ def train(opt):
                    "collate_fn": collater,
                    "num_workers": 12}
 
-    training_set = CocoDataset(root_dir=opt.data_path, set="train2017",
-                               transform=transforms.Compose([Normalizer(), Augmenter(), Resizer()]))
+    training_set = CSVDataset(train_file=parser.csv_train, class_list=parser.csv_classes,
+                                   transform=transforms.Compose([Normalizer(), Augmenter(), Resizer()]))
     training_generator = DataLoader(training_set, **training_params)
 
-    test_set = CocoDataset(root_dir=opt.data_path, set="val2017",
-                           transform=transforms.Compose([Normalizer(), Resizer()]))
-    test_generator = DataLoader(test_set, **test_params)
-
+    
     model = EfficientDet(num_classes=training_set.num_classes())
 
 
