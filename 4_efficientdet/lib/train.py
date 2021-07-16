@@ -57,7 +57,7 @@ def train(opt):
                    "collate_fn": collater,
                    "num_workers": 12}
 
-    training_set = CSVDataset(train_file=parser.csv_train, class_list=parser.csv_classes,
+    training_set = CSVDataset(train_file= opt..csv_train, class_list= opt.csv_classes,
                                    transform=transforms.Compose([Normalizer(), Augmenter(), Resizer()]))
     training_generator = DataLoader(training_set, **training_params)
 
