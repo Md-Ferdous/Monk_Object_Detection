@@ -48,7 +48,7 @@ def train(opt):
 
     training_params = {"batch_size": opt.batch_size * num_gpus,
                        "shuffle": True,
-                       "drop_last": True,
+                       "drop_last": False,
                        "collate_fn": collater,
                        "num_workers": 12}
 
